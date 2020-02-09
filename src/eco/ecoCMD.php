@@ -152,5 +152,32 @@ public function top(Player $player){
 			$form->sendToPlayer($player);
 			return $form;
 	}
-   //opForm todo
+   public function opForm(Player $sender){
+	        $api = $this->main->getServer()->getPluginManager()->getPlugin("FormAPI");
+		$form = $api->createSimpleForm(function(Player $sender, ?int $data){
+			if(!isset($data)) return;
+			switch($data){
+			case 0:
+                            $this->reduce($sender);
+			    break;
+                        case 1:
+                            $this->add($sender);
+                            break;
+                        case 2:
+                            $this->set($sender);
+                            break;
+                        case 3:
+                            $this->give($sender);
+                            break;
+            }
+          });
+       $form->setTitle(T::GREEN . "EconomyUI");
+       $form->addButton(T::AQUA . "Reduce Money");
+       $form->addButton(T::YELLOW . "Add Money");
+       $form->addButton(T::GOLD . "Set Money");
+       $form->addButton(T::AQUA . "Give Money");  
+       $form->addButton(T::RED . "EXIT");
+       $form->sendToPlayer($sender);
+     }
+//todo
 }
