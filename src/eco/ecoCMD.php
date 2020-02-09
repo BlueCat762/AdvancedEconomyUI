@@ -99,12 +99,58 @@ public function pay(Player $sender){
                 $f->addInput("Amount", "1000");
 		$f->sendToPlayer($sender);
 	     }
-public function see(Player $sender){
-                $api = $this->main->getServer()->getPluginManager()->getPlugin("FormAPI");
+public function see(Player $player){
+		$api = $this->main->getServer()->getPluginManager()->getPlugin("FormAPI");
+		$f = $api->createCustomForm(function(Player $player, ?array $data){
+			if(!isset($data)) return;
+			if($this->main->getServer()->getOfflinePlayer($data[0])->hasPlayedBefore() || $this->main->getServer()->getOfflinePlayer($data[0])->isOnline() && EconomyAPI::getInstance()->myMoney($data[0]) !== null){
+				$this->seeForm($player, $data[0]);
+			}else{
+				$player->sendMessage(T::RED . "Player is offline");
+			}
+		});
+		$f->setTitle(T::GREEN . "EconomyUI");
+		$f->addInput("Player name", "Bumbumkill");
+		$f->sendToPlayer($player);
+	}
+public function seeForm(Player $player, string $player1){
+		$api = $this->main->getServer()->getPluginManager()->getPlugin("FormAPI");
 		$f = $api->createCustomForm(function(Player $player, ?array $data){
 		});
 		$f->setTitle(T::GREEN . "EconomyUI");
-		$f->addLabel("");
-		$f->sendToPlayer($sender);
-	     }
+		$f->addLabel(T::YELLOW . $player1 .  money: . " " . T::AQUA . EconomyAPI::getInstance()->myMoney($player1) . "\n\n\n\n\n\n");
+		$f->sendToPlayer($player);
+	}
+public function top(Player $player){
+		$money = $this->main->getServer()->getPluginManager()->getPlugin("EconomyAPI");
+		$money_top = $money->getAllMoney();
+		$message = "";
+		if(count($money_top) > 0){
+			arsort($money_top);
+			$i = 1;
+			foreach($money_top as $name => $money){
+				$message .= "  §f".$i.". ".$name.":    ".$money." §a$"."\n";
+				if($i >= 10){
+					break;
+					}
+					++$i;
+				}}
+	    $api = $this->main->getServer()->getPluginManager()->getPlugin("FormAPI");
+		$form = $api->createSimpleForm(function (Player $player, int $data = null){
+			$result = $data;
+			if($result === null){
+				return true;
+				}
+				switch($result){
+					case "0";
+					break;
+				}
+			});
+			$form->setTitle(T::GREEN . "Top 10 Richest Player");
+			$form->setContent("".$message);
+	                $form->addButton("Sumbit");
+			$form->sendToPlayer($player);
+			return $form;
+	}
+   //opForm todo
 }
