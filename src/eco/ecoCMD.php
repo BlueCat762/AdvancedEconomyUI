@@ -41,7 +41,7 @@ public function execute(CommandSender $sender, string $label, array $args){
 			}
 		}
 		if($args[0] === "op"){
-			if($sender->hasPermission("factionui.use.admin")){
+			if($sender->hasPermission("eco.use.op")){
 				$this->opForm($sender);
 			}else{
 				$sender->sendMessage("§cYou don't have permission!");
