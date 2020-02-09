@@ -25,5 +25,30 @@ class ecoCMD extends Command implements PluginIdentifiableCommand{
 		$this->main = $main;
 		parent::__construct("economyui", "EcoUI", "/ecoui", ["ecui", "ecoui", "eui"]);
 	}
+
+public function execute(CommandSender $sender, string $label, array $args){
+		if(!$sender instanceof Player){
+			$sender->sendMessage("§crun command in game!");
+			return false;
+		}
+		if(!isset($args[0]) || $args[0] !== "op"){
+			if($sender->hasPermission("eco.cmd.use")){
+				$this->memberForm($sender);
+				return true;
+			}else{
+				$sender->sendMessage("§eYou don't have permission");
+				return false;
+			}
+		}
+		if($args[0] === "op"){
+			if($sender->hasPermission("factionui.use.admin")){
+				$this->opForm($sender);
+			}else{
+				$sender->sendMessage("§cYou don't have permission!");
+				return false;
+			}
+		}
+		return false;
+	}
   //todo
 }
